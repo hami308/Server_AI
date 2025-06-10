@@ -14,24 +14,115 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # hàm dự bào thời tiết
+# def du_bao():
+#     """Chạy dự báo thời tiết"""
+#     try:
+#         logger.info("🔮 Bắt đầu dự báo...")
+#         # dự báo % xảy ra mưa
+#         data = get_weather_summary()
+        
+#         if data and 'error' not in data:
+#             gio_mua = len([f for f in data['forecast_24h'] if f.get('prediction') == 'RAIN'])
+#             ngay_mua = len([f for f in data['forecast_7days'] if '🌧️' in f.get('weather', '')])
+            
+#             logger.info(f"✅ Dự báo xong lúc {datetime.now().strftime('%H:%M:%S')}")
+#             logger.info(f"   📊 24h: {gio_mua}/{len(data['forecast_24h'])} giờ có mưa")
+#             logger.info(f"   📅 7 ngày: {ngay_mua}/{len(data['forecast_7days'])} ngày mưa")
+#         else:
+#             logger.error("❌ Dự báo thất bại")
+#     except Exception as e:
+#         logger.error(f"❌ Lỗi dự báo: {e}")
+
+# hàm dự bào thời tiết với hiển thị chi tiết
 def du_bao():
     """Chạy dự báo thời tiết"""
     try:
         logger.info("🔮 Bắt đầu dự báo...")
         # dự báo % xảy ra mưa
         data = get_weather_summary()
-        
+                
         if data and 'error' not in data:
             gio_mua = len([f for f in data['forecast_24h'] if f.get('prediction') == 'RAIN'])
             ngay_mua = len([f for f in data['forecast_7days'] if '🌧️' in f.get('weather', '')])
-            
+                        
             logger.info(f"✅ Dự báo xong lúc {datetime.now().strftime('%H:%M:%S')}")
             logger.info(f"   📊 24h: {gio_mua}/{len(data['forecast_24h'])} giờ có mưa")
             logger.info(f"   📅 7 ngày: {ngay_mua}/{len(data['forecast_7days'])} ngày mưa")
+            
+            # ========== HIỂN THỊ CHI TIẾT DỰ BÁO 24H ==========
+            print("\n" + "="*50)
+            print("🔮 DỰ BÁO 24H TIẾP THEO")
+            print("="*50)
+            print(f"{'Thời gian':<20} {'Xác suất':<10} {'Dự báo'}")
+            print("-"*45)
+            
+            for forecast in data['forecast_24h'][:12]:  # Hiển thị 12h đầu
+                time_str = datetime.strptime(forecast['time'], '%Y-%m-%d %H:%M:%S').strftime('%m/%d %H:%M')
+                prob = forecast['probability']
+                pred = "🌧️ Mưa" if forecast['prediction'] == 'RAIN' else "☀️ Khô"
+                print(f"{time_str:<20} {prob:>5.1f}%     {pred}")
+            
+            if len(data['forecast_24h']) > 12:
+                print(f"... và {len(data['forecast_24h']) - 12} giờ nữa")
+            
+            # ========== HIỂN THỊ DỰ BÁO 7 NGÀY ==========
+            print("\n" + "="*50)
+            print("📅 DỰ BÁO 7 NGÀY")
+            print("="*50)
+            print(f"{'Ngày':<15} {'Xác suất':<10} {'Max':<8} {'Thời tiết'}")
+            print("-"*50)
+            
+            for forecast in data['forecast_7days']:
+                date_str = datetime.strptime(forecast['date'][:10], '%Y-%m-%d').strftime('%m/%d (%a)')
+                avg_prob = forecast['probability']
+                max_prob = forecast['max_probability']
+                weather = forecast['weather']
+                print(f"{date_str:<15} {avg_prob:>5.1f}%     {max_prob:>5.1f}%  {weather}")
+            
+            # ========== TỔNG KẾT ==========
+            print("\n" + "="*50)
+            print("📊 TỔNG KẾT")
+            print("="*50)
+            
+            # Thống kê 24h
+            probs_24h = [f['probability'] for f in data['forecast_24h']]
+            avg_24h = sum(probs_24h) / len(probs_24h)
+            max_24h = max(probs_24h)
+            
+            print(f"📈 24h tiếp theo:")
+            print(f"   Trung bình: {avg_24h:.1f}%")
+            print(f"   Cao nhất: {max_24h:.1f}%")
+            print(f"   Giờ có mưa: {gio_mua}/{len(data['forecast_24h'])}")
+            
+            # Thống kê 7 ngày
+            probs_7d = [f['max_probability'] for f in data['forecast_7days']]
+            avg_7d = sum(probs_7d) / len(probs_7d)
+            max_7d = max(probs_7d)
+            
+            print(f"📅 7 ngày tới:")
+            print(f"   Trung bình: {avg_7d:.1f}%")
+            print(f"   Cao nhất: {max_7d:.1f}%")
+            print(f"   Ngày mưa: {ngay_mua}/{len(data['forecast_7days'])}")
+            
+            # Lời khuyên
+            print(f"\n💡 KHUYẾN NGHỊ:")
+            if max_24h > 70:
+                print("   🌧️ Khả năng mưa cao - nên mang ô!")
+            elif max_24h > 40:
+                print("   ⛅ Có thể mưa - chuẩn bị ô phòng khi")
+            else:
+                print("   ☀️ Thời tiết khô ráo - không cần ô")
+                
+            print("="*50 + "\n")
+            
         else:
             logger.error("❌ Dự báo thất bại")
+            if 'error' in data:
+                print(f"❌ Lỗi: {data['error']}")
+                
     except Exception as e:
         logger.error(f"❌ Lỗi dự báo: {e}")
+        print(f"❌ Exception: {e}")
 
 def lap_du_bao():
     """Lặp dự báo mỗi 1 phút"""
