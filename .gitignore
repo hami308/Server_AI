@@ -1,0 +1,99 @@
+# =================== .gitignore - WEATHER AI PROJECT ===================
+
+# Environments (có sẵn - OK)
+.env
+.venv
+env/
+venv/
+venv310/  # Thêm folder cụ thể của bạn
+ENV/
+env.bak/
+venv.bak/
+
+# Python Cache (có sẵn - OK)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Testing (có sẵn - OK)
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Flask stuff (có sẵn - OK)
+instance/
+.webassets-cache
+
+# IDE & Editor Settings - THÊM MỚI
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Files - THÊM MỚI
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Development Files - THÊM MỚI
+dev-requirements.txt
+*.log
+*.sqlite3
+*.db
+
+# Large Data Files - THÊM MỚI (nếu có)
+*.csv
+*.xlsx
+data/raw/
+data/processed/
+!data/models/rain/  # GIỮ model folder
+
+# Backup Files - THÊM MỚI
+*.bak
+*.backup
+*.old
+*.orig
+
+# Jupyter Notebooks - THÊM MỚI
+.ipynb_checkpoints
+
+# Static Files không cần thiết - THÊM MỚI
+static/uploads/
+static/temp/
+templates/  # Nếu chỉ làm API
+
+# ✅ Files sẽ PUSH lên GitHub:
+# - *.py (Python files)
+# - requirements.txt
+# - runtime.txt  
+# - data/models/rain/ (AI model)
+# - config/ (Configuration)
+# - services/ (Services)
+# - models/ (Python modules)
+# - README.md
