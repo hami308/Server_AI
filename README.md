@@ -1,9 +1,10 @@
-# 1.
+# chú thích 1. cách chạy dự án 
 # chạy dự án weather-server-ai
-# -> chạy trong môi trường ảo venv310 : -> venv310\Scripts\activate
+# -> chạy trong môi trường ảo venv310 (chứa python 3.10 ) : -> venv310\Scripts\activate
 # -> python app.py
+# -> deactivate tắt môi trường ảo
 
-# 2. deploy lên render 
+# chú thích 2. deploy lên render 
 # bước 1 : chuẩn bị code 
 # -> 1.1: Tạo file requirements.txt : chứa các thư viện 
 # -> 1.1: Tạo file runtime.txt : chứa phiên bản python 
@@ -11,7 +12,13 @@
 
 # bước 2 : push code lên github 
 # git init
-# git add . 
+# git add . (Các file đẩy lên github bao gồm config, data, models, services, app.py, README.md, requirements.txt, runtime.txt, .gitignore (không quan trọng))
+# Cách an toàn nhất - add từng nhóm
+git add app.py requirements.txt runtime.txt README.md .gitignore
+git add config/
+git add data/models/
+git add services/
+git add models/
 # git commit -m "Deploy dự án lên server"
 # git remote add origin Link_github
 # git push -u origin main 
@@ -51,3 +58,13 @@
 # bước 7 : kiểm tra kết quả
 # 7.1 : Truy cập vào URL của web service
 # 7.2 : kiểm tra kết quả
+
+
+# chú thich 3: giải thích các file 
+# data : chứa các file model dự báo dự báo nhiệt độ và % mưa
+# config : Định nghĩa tên các json trên firebase
+# models : Chạy dự đoán dự báo nhiệt độ và % mưa tả về kết quả
+# services : truy cập firebase lấy dữ liệu về dự báo 
+# app.py : file chính chạy server
+# README.md : file hướng dẫn sử dụng
+
