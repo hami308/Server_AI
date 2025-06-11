@@ -2,13 +2,13 @@ import requests
 import pandas as pd
 from datetime import datetime
 import os
+import json
 from config.server_config import FIREBASE_PATHS
+ # Cấu hình firebase
+base_url = os.getenv("FIREBASE_DATABASE_URL", "https://weather2-b2bc4-default-rtdb.firebaseio.com")
+auth = os.getenv("FIREBASE_AUTH","MWgOuA7M7wkxdVvHXs25RFTFz6Lj3ARVeeKO7JgA")
 
 def get_weather_data():
-    # Cấu hình firebase
-    base_url = os.getenv("FIREBASE_DATABASE_URL", "https://weather2-b2bc4-default-rtdb.firebaseio.com")
-    auth = os.getenv("FIREBASE_AUTH","MWgOuA7M7wkxdVvHXs25RFTFz6Lj3ARVeeKO7JgA")
-
     print("Đang lấy dữ liệu từ firebase ...")
 
     # Lấy dữ liệu từ firebase
@@ -113,5 +113,20 @@ def get_weather_data():
     column_order = ['YEAR', 'MO', 'DY', 'HR', 'QV2M', 'PRECTOTCORR', 'PS', 'T2M', 'ALLSKY_SFC_PAR_TOT']
     df = df[column_order]
         
-    print(f"✅ Trả về {len(df)} records với 9 columns")
+    print(f" Trả về {len(df)} records với 9 columns")
     return df
+def delete_data_from_firebase( node):
+    url = f"{base_url}/{node}.json?auth={auth}"
+    resp = requests.delete(url)
+    resp.raise_for_status()
+    return resp.json()
+
+def push_data_to_firebase( node, data):
+    # Xóa dữ liệu cũ trước
+    delete_data_from_firebase(node)
+
+    url = f"{base_url}/{node}.json?auth={auth}"
+    headers = {'Content-Type': 'application/json'}
+    resp = requests.patch(url, data=json.dumps(data), headers=headers)
+    resp.raise_for_status()
+    return resp.json()
