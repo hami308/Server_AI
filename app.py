@@ -16,8 +16,8 @@ from datetime import datetime
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 logger = logging.getLogger(__name__)
-model_24h = load_model("D:\\SERVER_DBTT\\best_model.keras")
-model_7d = load_model("D:\\SERVER_DBTT\\best_model_7d.keras")
+model_24h = load_model("data/models/temp-humidity/best_model.keras")
+model_7d = load_model("data/models/temp-humidity/best_model_7d.keras")
 
 def du_bao(data):
     print("Bắt đầu quá trình dự báo ")
