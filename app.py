@@ -20,7 +20,7 @@ model_24h = load_model("D:\\SERVER_DBTT\\best_model.keras")
 model_7d = load_model("D:\\SERVER_DBTT\\best_model_7d.keras")
 
 def du_bao(data):
-    print("Bắt đầu dự báo")
+    print("Bắt đầu quá trình dự báo ")
 
     temp_forecast_24h = temp_24h(model_24h,data)
     temp_forecast_7d = temp_7d(model_7d,data)
